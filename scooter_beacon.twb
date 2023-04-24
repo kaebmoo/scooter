@@ -1,0 +1,380 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 20231.23.0310.1044                               -->
+<workbook original-version='18.1' source-build='2023.1.0 (20231.23.0310.1044)' source-platform='win' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <document-format-change-manifest>
+    <_.fcp.AnimationOnByDefault.true...AnimationOnByDefault />
+    <_.fcp.MarkAnimation.true...MarkAnimation />
+    <_.fcp.ObjectModelEncapsulateLegacy.true...ObjectModelEncapsulateLegacy />
+    <_.fcp.ObjectModelTableType.true...ObjectModelTableType />
+    <_.fcp.SchemaViewerObjectModel.true...SchemaViewerObjectModel />
+    <SheetIdentifierTracking />
+    <WindowsPersistSimpleIdentifiers />
+  </document-format-change-manifest>
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <_.fcp.AnimationOnByDefault.false...style>
+    <_.fcp.AnimationOnByDefault.false..._.fcp.MarkAnimation.true...style-rule element='animation'>
+      <_.fcp.AnimationOnByDefault.false...format attr='animation-on' value='ao-on' />
+    </_.fcp.AnimationOnByDefault.false..._.fcp.MarkAnimation.true...style-rule>
+  </_.fcp.AnimationOnByDefault.false...style>
+  <datasources>
+    <datasource caption='beacon_data' inline='true' name='federated.1lcqek708svokf1a34zxe1rmizu8' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='beacon_data' name='textscan.0enq08702gdwyx1gp71ml1nycdn6'>
+            <connection class='textscan' directory='C:/Users/CAT/Documents/GitHub/scooter' filename='beacon_data.csv' password='' server='' />
+          </named-connection>
+        </named-connections>
+        <_.fcp.ObjectModelEncapsulateLegacy.false...relation connection='textscan.0enq08702gdwyx1gp71ml1nycdn6' name='beacon_data.csv' table='[beacon_data#csv]' type='table'>
+          <columns character-set='UTF-8' header='yes' locale='th_TH' separator=','>
+            <column datatype='string' name='beacon_id' ordinal='0' />
+            <column datatype='integer' name='timestamp' ordinal='1' />
+            <column datatype='integer' name='device_id' ordinal='2' />
+            <column datatype='boolean' name='is_present' ordinal='3' />
+            <column datatype='integer' name='rssi' ordinal='4' />
+            <column datatype='datetime' date-parse-format='yyyy-MM-dd HH:mm:ssZZZZZ' name='timestamp_datetime' ordinal='5' />
+          </columns>
+        </_.fcp.ObjectModelEncapsulateLegacy.false...relation>
+        <_.fcp.ObjectModelEncapsulateLegacy.true...relation connection='textscan.0enq08702gdwyx1gp71ml1nycdn6' name='beacon_data.csv' table='[beacon_data#csv]' type='table'>
+          <columns character-set='UTF-8' header='yes' locale='th_TH' separator=','>
+            <column datatype='string' name='beacon_id' ordinal='0' />
+            <column datatype='integer' name='timestamp' ordinal='1' />
+            <column datatype='integer' name='device_id' ordinal='2' />
+            <column datatype='boolean' name='is_present' ordinal='3' />
+            <column datatype='integer' name='rssi' ordinal='4' />
+            <column datatype='datetime' date-parse-format='yyyy-MM-dd HH:mm:ssZZZZZ' name='timestamp_datetime' ordinal='5' />
+          </columns>
+        </_.fcp.ObjectModelEncapsulateLegacy.true...relation>
+        <metadata-records>
+          <metadata-record class='capability'>
+            <remote-name />
+            <remote-type>0</remote-type>
+            <parent-name>[beacon_data.csv]</parent-name>
+            <remote-alias />
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;binary&quot;</attribute>
+              <attribute datatype='string' name='currency'>&quot;฿&quot;</attribute>
+              <attribute datatype='string' name='field-delimiter'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;th_TH&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>beacon_id</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[beacon_id]</local-name>
+            <parent-name>[beacon_data.csv]</parent-name>
+            <remote-alias>beacon_id</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>timestamp</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[timestamp]</local-name>
+            <parent-name>[beacon_data.csv]</parent-name>
+            <remote-alias>timestamp</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>device_id</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[device_id]</local-name>
+            <parent-name>[beacon_data.csv]</parent-name>
+            <remote-alias>device_id</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>is_present</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[is_present]</local-name>
+            <parent-name>[beacon_data.csv]</parent-name>
+            <remote-alias>is_present</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>rssi</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[rssi]</local-name>
+            <parent-name>[beacon_data.csv]</parent-name>
+            <remote-alias>rssi</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>timestamp_datetime</remote-name>
+            <remote-type>7</remote-type>
+            <local-name>[timestamp_datetime]</local-name>
+            <parent-name>[beacon_data.csv]</parent-name>
+            <remote-alias>timestamp_datetime</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>datetime</local-type>
+            <aggregation>Year</aggregation>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='binary' />
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <aliases enabled='yes' />
+      <_.fcp.ObjectModelTableType.true...column caption='beacon_data.csv' datatype='table' name='[__tableau_internal_object_id__].[beacon_data.csv_F5D06AAEEDA34FF4A3E542AC15DC32A1]' role='measure' type='quantitative' />
+      <column caption='Beacon Id' datatype='string' name='[beacon_id]' role='dimension' type='nominal' />
+      <column caption='Device Id' datatype='integer' name='[device_id]' role='dimension' type='ordinal' />
+      <column caption='Is Present' datatype='boolean' name='[is_present]' role='dimension' type='nominal' />
+      <column caption='Rssi' datatype='integer' name='[rssi]' role='measure' type='quantitative' />
+      <column caption='Timestamp' datatype='integer' name='[timestamp]' role='measure' type='quantitative' />
+      <column caption='Timestamp Datetime' datatype='datetime' name='[timestamp_datetime]' role='dimension' type='ordinal' />
+      <layout _.fcp.SchemaViewerObjectModel.false...dim-percentage='0.5' _.fcp.SchemaViewerObjectModel.false...measure-percentage='0.4' dim-ordering='alphabetic' measure-ordering='alphabetic' show-structure='true' />
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;Thailand&quot;' />
+      </semantic-values>
+      <_.fcp.ObjectModelEncapsulateLegacy.true...object-graph>
+        <objects>
+          <object caption='beacon_data.csv' id='beacon_data.csv_F5D06AAEEDA34FF4A3E542AC15DC32A1'>
+            <properties context=''>
+              <relation connection='textscan.0enq08702gdwyx1gp71ml1nycdn6' name='beacon_data.csv' table='[beacon_data#csv]' type='table'>
+                <columns character-set='UTF-8' header='yes' locale='th_TH' separator=','>
+                  <column datatype='string' name='beacon_id' ordinal='0' />
+                  <column datatype='integer' name='timestamp' ordinal='1' />
+                  <column datatype='integer' name='device_id' ordinal='2' />
+                  <column datatype='boolean' name='is_present' ordinal='3' />
+                  <column datatype='integer' name='rssi' ordinal='4' />
+                  <column datatype='datetime' date-parse-format='yyyy-MM-dd HH:mm:ssZZZZZ' name='timestamp_datetime' ordinal='5' />
+                </columns>
+              </relation>
+            </properties>
+          </object>
+        </objects>
+      </_.fcp.ObjectModelEncapsulateLegacy.true...object-graph>
+    </datasource>
+  </datasources>
+  <worksheets>
+    <worksheet name='Sheet 1'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='beacon_data' name='federated.1lcqek708svokf1a34zxe1rmizu8' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1lcqek708svokf1a34zxe1rmizu8'>
+            <column caption='Beacon Id' datatype='string' name='[beacon_id]' role='dimension' type='nominal' />
+            <column caption='Device Id' datatype='integer' name='[device_id]' role='dimension' type='ordinal' />
+            <column caption='Is Present' datatype='boolean' name='[is_present]' role='dimension' type='nominal' />
+            <column-instance column='[beacon_id]' derivation='None' name='[none:beacon_id:nk]' pivot='key' type='nominal' />
+            <column-instance column='[device_id]' derivation='None' name='[none:device_id:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[is_present]' derivation='None' name='[none:is_present:nk]' pivot='key' type='nominal' />
+            <column-instance column='[timestamp_datetime]' derivation='None' name='[none:timestamp_datetime:nk]' pivot='key' type='ordinal' />
+            <column caption='Rssi' datatype='integer' name='[rssi]' role='measure' type='quantitative' />
+            <column-instance column='[rssi]' derivation='Sum' name='[sum:rssi:qk]' pivot='key' type='quantitative' />
+            <column caption='Timestamp Datetime' datatype='datetime' name='[timestamp_datetime]' role='dimension' type='ordinal' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='header'>
+            <format attr='width' field='[federated.1lcqek708svokf1a34zxe1rmizu8].[none:beacon_id:nk]' value='348' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <text column='[federated.1lcqek708svokf1a34zxe1rmizu8].[sum:rssi:qk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>([federated.1lcqek708svokf1a34zxe1rmizu8].[none:device_id:ok] / ([federated.1lcqek708svokf1a34zxe1rmizu8].[none:beacon_id:nk] / [federated.1lcqek708svokf1a34zxe1rmizu8].[none:timestamp_datetime:nk]))</rows>
+        <cols>[federated.1lcqek708svokf1a34zxe1rmizu8].[none:is_present:nk]</cols>
+      </table>
+      <simple-id uuid='{9150ADC5-83C7-4A55-B781-BC9DF2F04C71}' />
+    </worksheet>
+  </worksheets>
+  <windows source-height='30'>
+    <window class='worksheet' maximized='true' name='Sheet 1'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <highlight>
+          <color-one-way>
+            <field>[federated.1lcqek708svokf1a34zxe1rmizu8].[none:beacon_id:nk]</field>
+            <field>[federated.1lcqek708svokf1a34zxe1rmizu8].[none:device_id:ok]</field>
+            <field>[federated.1lcqek708svokf1a34zxe1rmizu8].[none:is_present:nk]</field>
+            <field>[federated.1lcqek708svokf1a34zxe1rmizu8].[none:timestamp_datetime:nk]</field>
+            <field>[federated.1lcqek708svokf1a34zxe1rmizu8].[tdy:timestamp_datetime:ok]</field>
+          </color-one-way>
+        </highlight>
+      </viewpoint>
+      <simple-id uuid='{45E9B0A8-DA4C-4924-BF88-AD97FB1C560F}' />
+    </window>
+  </windows>
+  <thumbnails>
+    <thumbnail height='288' name='Sheet 1' width='288'>
+      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
+      jA70MDadoaaxieI8L9MTw0SGJ7Bw33vt4T3AdCJKV2+EQEk1jVUl8x/nbJyenn7coTIaasO4
+      HA5SsTF67o7gDhbS2FCL1wXJ2AR9A8M4fIUsaq7F/cAHqD9EFBFj9IeIImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKM
+      AiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImKMAiQixihAImLM
+      /wGctWH4pPwTuQAAAABJRU5ErkJggg==
+    </thumbnail>
+  </thumbnails>
+</workbook>
