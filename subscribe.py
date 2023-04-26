@@ -50,16 +50,20 @@ def update_lastseen_data(items):
     print("update: ", items)
     table_lastseen.update_item(
     Key={
-        'beacon_id': items["beacon_id"],
+        #'beacon_id': items["beacon_id"],
         'lastseen': items["beacon_id"]
     },
-    UpdateExpression='SET device_id = :device_id, timestamp = :timestamp, rssi = :rssi, is_present = :is_present, state = :state',
+    UpdateExpression='SET device_id = :device_id, #ts = :timestamp, rssi = :rssi, is_present = :is_present, #st = :state',
     ExpressionAttributeValues={
         ':device_id': items["device_id"],
         ':timestamp': items["timestamp"],
         ':rssi': items["rssi"],
-        'is_present': items["is_present"],
-        'state': items["state"]
+        ':is_present': items["is_present"],
+        ':state': items["state"]
+    },
+    ExpressionAttributeNames={
+        "#ts": "timestamp",
+        "#st": "state"
     }
 )
 
@@ -98,33 +102,55 @@ def on_message(client, userdata, message):
     print(json.dumps(beacon_msg, indent=4))
     is_in_table = query_data(beacon_msg["beacon_id"]) # query beacon_id from lastseen table
 
-    json_data = json.dumps(is_in_table, cls=DecimalEncoder)
-    lastseen_data = json.loads(json_data)
-    print(lastseen_data[0]["is_present"])
     # if not present in table 
     if not is_in_table:
+        # new data
         print("beacon_id not present in lastseen table. adding data")
         beacon_msg['state'] = 0
         # add data to last seen table
         response = table_lastseen.put_item(Item = beacon_msg)
     else:
+        json_data = json.dumps(is_in_table, cls=DecimalEncoder)
+        lastseen_data = json.loads(json_data)
+        print("is present: ", lastseen_data[0]["is_present"])
+        print("state: ", lastseen_data[0]["state"])
+        state = int(lastseen_data[0]["state"])
         print("beacon found")
-        print(is_in_table)
+        # print(is_in_table)
         # compare incoming message (is_present) == lastseen (is_present)
-        # bug 
+        # 
         if (beacon_msg["is_present"] == lastseen_data[0]["is_present"]):
             # update lastseen
+            if (lastseen_data[0]["is_present"] == False):
+                if state > 0:
+                    beacon_msg['state'] = 0
+                    update_lastseen_data(beacon_msg) # update last seen table 
+
+                    # add record to transaction table
+                    print("transaction add.")
+                    beacon_msg.pop('state', None)
+                    if beacon_msg["is_present"] == True:
+                        beacon_msg['status'] = "completed"
+                    else:
+                        beacon_msg['status'] = "ongoing"
+                    
+                    response = table_transaction.put_item(Item = beacon_msg)
+                '''
+                else:
+                    beacon_msg['state'] = 0
+                    update_lastseen_data(beacon_msg)
+                '''
+            # true
             beacon_msg['state'] = 0
             update_lastseen_data(beacon_msg)
         else:
             # status change
-            if (lastseen_data[0]['state'] < 1):
-                beacon_msg['state'] = beacon_msg['state'] + 1
-            else:
+            if (beacon_msg["is_present"] == True) and (lastseen_data[0]["is_present"] == False):
+                # completed
                 beacon_msg['state'] = 0
-                update_lastseen_data(beacon_msg) # update last seen table 
-
+                update_lastseen_data(beacon_msg)
                 # add record to transaction table
+                print("transaction add.")
                 beacon_msg.pop('state', None)
                 if beacon_msg["is_present"] == True:
                     beacon_msg['status'] = "completed"
@@ -132,6 +158,12 @@ def on_message(client, userdata, message):
                     beacon_msg['status'] = "ongoing"
                 
                 response = table_transaction.put_item(Item = beacon_msg)
+            elif (beacon_msg["is_present"] == False) and (lastseen_data[0]["is_present"] == True):
+                if (state < 1):
+                    beacon_msg['state'] = state + 1
+                    update_lastseen_data(beacon_msg)
+                
+
             
 
 def on_publish(client,userdata,result):             #create function for callback
