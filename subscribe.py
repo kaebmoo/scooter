@@ -9,6 +9,13 @@ import pandas as pd
 import boto3
 from pprint import pprint
 from boto3.dynamodb.conditions import Key
+from decimal import Decimal
+
+class DecimalEncoder(json.JSONEncoder):
+  def default(self, obj):
+    if isinstance(obj, Decimal):
+      return str(obj)
+    return json.JSONEncoder.default(self, obj)
 
 # set up dynamodb and table
 # Get the service resource.
@@ -21,6 +28,7 @@ dynamodb = boto3.resource('dynamodb')
 # on the table resource are accessed or its load() method is called.
 table_scooter = dynamodb.Table('scooter')
 table_lastseen = dynamodb.Table('scooter_lastseen')
+table_transaction = dynamodb.Table('scooter_transaction')
 
 def query_data(beacon):
     print("searching for ", beacon)
@@ -34,9 +42,26 @@ def query_data(beacon):
     print(f"ScannedCount: {response['ScannedCount']}")
     return(response["Items"])
 
-def add_data(items):
-    print(items)
+def add_lastseen_data(items):
+    print("add: ", items)
     response = table_lastseen.put_item(Item = items)
+
+def update_lastseen_data(items):
+    print("update: ", items)
+    table_lastseen.update_item(
+    Key={
+        'beacon_id': items["beacon_id"],
+        'lastseen': items["beacon_id"]
+    },
+    UpdateExpression='SET device_id = :device_id, timestamp = :timestamp, rssi = :rssi, is_present = :is_present, state = :state',
+    ExpressionAttributeValues={
+        ':device_id': items["device_id"],
+        ':timestamp': items["timestamp"],
+        ':rssi': items["rssi"],
+        'is_present': items["is_present"],
+        'state': items["state"]
+    }
+)
 
 
 # อ่านข้อมูลจาก mqtt broker
@@ -56,11 +81,12 @@ def on_message(client, userdata, message):
     print("message qos=",message.qos)
     print("message retain flag=",message.retain)
     '''
+    '''
     print(beacon_msg["device_id"])
     print(beacon_msg["beacon_id"])
     print(beacon_msg["timestamp"])
     print(beacon_msg["rssi"])
-
+    '''
     if beacon_msg["rssi"] >= -70:
         is_present = True
     elif beacon_msg["rssi"] < -70:
@@ -71,13 +97,42 @@ def on_message(client, userdata, message):
     # beacon_msg["rssi"] = str(beacon_msg["rssi"])
     print(json.dumps(beacon_msg, indent=4))
     is_in_table = query_data(beacon_msg["beacon_id"]) # query beacon_id from lastseen table
+
+    json_data = json.dumps(is_in_table, cls=DecimalEncoder)
+    lastseen_data = json.loads(json_data)
+    print(lastseen_data[0]["is_present"])
     # if not present in table 
     if not is_in_table:
-        print("beacon_id not present in lastseen table. adding it")
-        add_data(beacon_msg) 
+        print("beacon_id not present in lastseen table. adding data")
+        beacon_msg['state'] = 0
+        # add data to last seen table
+        response = table_lastseen.put_item(Item = beacon_msg)
     else:
-        print("found the beacon")
+        print("beacon found")
         print(is_in_table)
+        # compare incoming message (is_present) == lastseen (is_present)
+        # bug 
+        if (beacon_msg["is_present"] == lastseen_data[0]["is_present"]):
+            # update lastseen
+            beacon_msg['state'] = 0
+            update_lastseen_data(beacon_msg)
+        else:
+            # status change
+            if (lastseen_data[0]['state'] < 1):
+                beacon_msg['state'] = beacon_msg['state'] + 1
+            else:
+                beacon_msg['state'] = 0
+                update_lastseen_data(beacon_msg) # update last seen table 
+
+                # add record to transaction table
+                beacon_msg.pop('state', None)
+                if beacon_msg["is_present"] == True:
+                    beacon_msg['status'] = "completed"
+                else:
+                    beacon_msg['status'] = "ongoing"
+                
+                response = table_transaction.put_item(Item = beacon_msg)
+            
 
 def on_publish(client,userdata,result):             #create function for callback
     print("data published to thingsboard \n")
@@ -122,7 +177,7 @@ def beacon_list(device_id):
 
 def main():
     print()
-    print(beacon_list("5046452"))
+    print("query beacon list by station id", beacon_list("5046452"))
 
     subscribe_data()
 
