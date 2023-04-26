@@ -16,7 +16,7 @@ beacon_id = ["E0702891-AE8E-8DC0-B0DE-3C666B326CA9:3138:0055", "FFFFFFFF-0D6C-CF
 
 
 def on_publish(client,userdata,result):             #create function for callback
-    print("data published to thingsboard \n")
+    print("data published to mqtt broker \n")
     pass
 client1= paho.Client("sensor1")                     #create client object
 client1.on_publish = on_publish                     #assign function to callback
