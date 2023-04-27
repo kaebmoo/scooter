@@ -11,6 +11,7 @@ from pprint import pprint
 from boto3.dynamodb.conditions import Key
 from decimal import Decimal
 
+# decode json result from dynamodb aws, decimal(0) text 
 class DecimalEncoder(json.JSONEncoder):
   def default(self, obj):
     if isinstance(obj, Decimal):
@@ -38,8 +39,8 @@ def query_data(beacon):
         ":beacon": beacon,
         },
     )
-    pprint(response["Items"])
-    print(f"ScannedCount: {response['ScannedCount']}")
+    # pprint(response["Items"])
+    # print(f"ScannedCount: {response['ScannedCount']}")
     return(response["Items"])
 
 def add_lastseen_data(items):
@@ -78,7 +79,7 @@ def on_message(client, userdata, message):
     msg = json.loads(msg_payload)
     # print(type(msg)) # debug message
     beacon_msg = json.loads(msg)
-    print(type(beacon_msg)) # debug message
+    # print(type(beacon_msg)) # debug message
     '''
     print("message received " ,str(message.payload.decode("utf-8")))
     print("message topic=",message.topic)
@@ -122,18 +123,18 @@ def on_message(client, userdata, message):
         if (beacon_msg["is_present"] == lastseen_data[0]["is_present"]):
             # update lastseen
             if (lastseen_data[0]["is_present"] == False):
-                if state > 0:
+                if state > 0: # second false, F->F เกิด False สองครั้ง
                     beacon_msg['state'] = 0
                     update_lastseen_data(beacon_msg) # update last seen table 
 
                     # add record to transaction table
-                    print("transaction add.")
+                    
                     beacon_msg.pop('state', None)
                     if beacon_msg["is_present"] == True:
                         beacon_msg['status'] = "completed"
                     else:
                         beacon_msg['status'] = "ongoing"
-                    
+                    print("ongoin, add transaction")
                     response = table_transaction.put_item(Item = beacon_msg)
                 '''
                 else:
@@ -145,21 +146,24 @@ def on_message(client, userdata, message):
             update_lastseen_data(beacon_msg)
         else:
             # status change
+            # change state from false -> true
             if (beacon_msg["is_present"] == True) and (lastseen_data[0]["is_present"] == False):
                 # completed
                 beacon_msg['state'] = 0
                 update_lastseen_data(beacon_msg)
                 # add record to transaction table
-                print("transaction add.")
+                
                 beacon_msg.pop('state', None)
                 if beacon_msg["is_present"] == True:
                     beacon_msg['status'] = "completed"
                 else:
                     beacon_msg['status'] = "ongoing"
-                
-                response = table_transaction.put_item(Item = beacon_msg)
+                if state == 0: # in case F->T->F->T->F-T เกิด Flase สลับ True
+                    print("completed, add transaction.")
+                    response = table_transaction.put_item(Item = beacon_msg)
+            # change state from true (present) -> false (ongoing)
             elif (beacon_msg["is_present"] == False) and (lastseen_data[0]["is_present"] == True):
-                if (state < 1):
+                if (state < 1): # first false
                     beacon_msg['state'] = state + 1
                     update_lastseen_data(beacon_msg)
                 
