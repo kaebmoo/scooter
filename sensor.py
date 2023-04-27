@@ -6,6 +6,22 @@ import calendar
 import time
 from datetime import datetime
 
+import boto3
+from pprint import pprint
+from boto3.dynamodb.conditions import Key
+import json
+from decimal import Decimal
+
+# Get the service resource.
+dynamodb = boto3.resource('dynamodb')
+
+# Instantiate a table resource object without actually
+# creating a DynamoDB table. Note that the attributes of this table
+# are lazy-loaded: a request is not made nor are the attribute
+# values populated until the attributes
+# on the table resource are accessed or its load() method is called.
+table_scooter = dynamodb.Table('scooter')
+
 # generate data for testing 
 # จำลองการส่ง beacon data ไปยัง mqtt broker
 
@@ -23,6 +39,8 @@ client1.on_publish = on_publish                     #assign function to callback
 client1.username_pw_set(ACCESS_TOKEN)               #access token from thingsboard device
 client1.connect(broker,port,keepalive=60)           #establish connection
 
+msg_id = 0
+
 while True:
     date = datetime.utcnow()
     utc_time = str(calendar.timegm(date.utctimetuple()))
@@ -38,6 +56,16 @@ while True:
     print(payload)
     message_payload = json.dumps(payload)   # convert string to json 
     print(message_payload)
-    ret= client1.publish("v1/devices/me/telemetry", message_payload) #topic-v1/devices/me/telemetry
+    ret = client1.publish("v1/devices/me/telemetry", message_payload) #topic-v1/devices/me/telemetry
+    print("mqtt return status:", ret)
+    msg_id += 1
+    message_id = str(msg_id)
+    print(type(message_payload))
+    message_db = json.loads(payload)
+    print(type(message_db))
+    
+    message_db["message_id"] = message_id
+    ## send to dynamodb scooter table
+    response = table_scooter.put_item(Item = message_db)
 
     time.sleep(5)
